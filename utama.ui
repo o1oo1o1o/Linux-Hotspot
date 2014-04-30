@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tabClient">
        <attribute name="title">
@@ -67,12 +67,12 @@
         <item>
          <widget class="QLabel" name="label">
           <property name="text">
-           <string>Status</string>
+           <string>Status Log</string>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPlainTextEdit" name="plainTextEdit"/>
+         <widget class="QPlainTextEdit" name="logService"/>
         </item>
        </layout>
       </widget>

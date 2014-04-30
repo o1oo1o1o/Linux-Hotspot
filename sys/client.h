@@ -6,6 +6,7 @@
 #include <QFile>
 #include <QTextStream>
 #include <QStringList>
+#include <QThread>
 
 class Client : public QObject
 {
@@ -18,8 +19,10 @@ signals:
 
 public slots:
     void readFile();
+    void startDaemon();
 private:
     QStringList clientList;
+    bool rundaemon;
 
 };
 
