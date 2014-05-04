@@ -7,6 +7,7 @@ Utama::Utama(QWidget *parent) :
 {
     //1. Set Up Layout
     ui->setupUi(this);
+    this->setWindowTitle("Linux Hotspot");
     this->setCentralWidget(ui->tabWidget);
     ui->tabWidget->setCurrentIndex(0);
     this->setupTabel();
@@ -16,7 +17,7 @@ Utama::Utama(QWidget *parent) :
 
 void Utama::setupTabel(){
     QStringList tableHeader;
-    tableHeader<<"Hostname"<<"IP Address"<<"Mac Address"<<"Lease";
+    tableHeader<<"Hostname"<<"IP Address"<<"Mac Address"<<"Status";
     ui->tabelClient->setColumnCount(tableHeader.size());
     ui->tabelClient->setHorizontalHeaderLabels(tableHeader);
     ui->tabelClient->horizontalHeader()->setStretchLastSection(true);
@@ -50,11 +51,7 @@ void Utama::recieveClient(QStringList clientList){
         ui->tabelClient->setItem(x,0,new QTableWidgetItem(QString(clientDetail.value(3))));
         ui->tabelClient->setItem(x,1,new QTableWidgetItem(QString(clientDetail.value(2))));
         ui->tabelClient->setItem(x,2,new QTableWidgetItem(QString(clientDetail.value(1))));
-        QDateTime time,curtime;
-        int current = (int) curtime.currentDateTime().toTime_t();
-        time.setTime_t(clientDetail.value(0).toInt() - current);
-        //time.toString(Qt::SystemLocaleShortDate);
-        ui->tabelClient->setItem(x,3,new QTableWidgetItem(QString(time.toString("hh:mm:ss"))));
+        ui->tabelClient->setItem(x,3,new QTableWidgetItem(QString(clientDetail.value(5))));
     }
 }
 
@@ -88,7 +85,7 @@ void Utama::startService(){
         stream<<"echo \"Start HostAPd\"\n";
         stream<<"hostapd -B -P /tmp/hostapdPID.chip /etc/hostapd.conf\n";
     }else{
-        qDebug()<<"Error : Gagal menulis script start "<<__FILE__<<__LINE__;
+        qDebug()<<"Error : Gagal menulis script start ";
     }
 
     QProcess execChmod,execStart;
@@ -99,7 +96,7 @@ void Utama::startService(){
     QString command = "pkexec --user root /bin/bash "+fileTmp;
     qDebug()<<command;
     execStart.start(command);
-    execStart.waitForReadyRead(-1)
+    execStart.waitForReadyRead(-1);
     qDebug()<<execStart.readAll();
 
     execStart.close();
@@ -125,7 +122,7 @@ void Utama::stopService(){
         stream<<"echo \"Kill Service IP WLAN\"\n";
         stream<<"kill `cat /tmp/hostapdPID.chip`";
     }else{
-        qDebug()<<"Error : Gagal menulis script stop "<<__FILE__<<__LINE__;
+        qDebug()<<"Error : Gagal menulis script stop ";
     }
 
     //Chmod Script
@@ -137,7 +134,7 @@ void Utama::stopService(){
     //Execute the Script
     QString command = "pkexec --user root /bin/bash "+fileTmp;
     execStop.start(command);
-    execStop.waitForFinished(-1)
+    execStop.waitForFinished(-1);
     qDebug()<<execStop.readAll();
 
     execStop.close();

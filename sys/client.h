@@ -7,6 +7,7 @@
 #include <QTextStream>
 #include <QStringList>
 #include <QThread>
+#include <QProcess>
 
 class Client : public QObject
 {

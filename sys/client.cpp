@@ -6,12 +6,7 @@ Client::Client(QObject *parent) :
 }
 
 void Client::readFile(){
-    QString file;
-    if( file.isNull() ){
-        //Default Parameter
-        file = "/var/lib/misc/dnsmasq.leases";
-        //file = "/home/kubuntu/Public/lease.txt";
-    }
+    QString file = "/var/lib/misc/dnsmasq.leases";
 
     QFile fileClient(file);
     if( fileClient.open(QIODevice::ReadOnly | QIODevice::Text) ){
@@ -20,12 +15,27 @@ void Client::readFile(){
         QTextStream clientItem(&fileClient);
         clientList.clear();
 
+
+
         //int count=0;
         while(!clientItem.atEnd()){
+            QString item = clientItem.readLine();
+            QString ip = item.split(" ").value(2);
+            QString state;
+
+            //Ping Client
+            int pingResult = QProcess::execute("ping",QStringList()<<"-c1"<<ip);
+            if(pingResult == 0){
+                state = "Connected";
+            }else{
+                state = "Disconnect";
+            }
+
             //Membaca Perbaris Line
-            clientList.append(clientItem.readLine());
+            clientList.append(item+" "+state);
             //qDebug()<<"Client "+clientList.value(count);
         }
+
 
         emit sendClient(clientList);
 
@@ -38,7 +48,7 @@ void Client::readFile(){
 void Client::startDaemon(){
     while(rundaemon){
         this->readFile();
-        QThread::usleep(5000000);
+        QThread::usleep(10000000);
         //qDebug()<<"Running";
     }
 }

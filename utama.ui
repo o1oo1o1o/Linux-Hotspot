@@ -177,6 +177,7 @@
     <property name="title">
      <string>Menu</string>
     </property>
+    <addaction name="actionAbout"/>
     <addaction name="actionExit"/>
    </widget>
    <addaction name="menuMenu"/>
@@ -185,6 +186,11 @@
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
    </property>
   </action>
  </widget>
